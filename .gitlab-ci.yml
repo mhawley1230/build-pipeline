@@ -40,11 +40,11 @@ lint-test-job:   # This job also runs in the test stage.
 
 deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
-  environment:
-    'S3_BUCKET_NAME': '${S3_BUCKET_NAME}'
-    'AWS_ACCESS_KEY_ID': '${AWS_ACCESS_KEY_ID}'
-    'AWS_SECRET_ACCESS_KEY': '${AWS_SECRET_ACCESS_KEY}'
-    'AWS_DEFAULT_REGION': '${AWS_DEFAULT}'
+  variables:
+    S3_BUCKET_NAME: secret
+    AWS_ACCESS_KEY_ID: secret
+    AWS_SECRET_ACCESS_KEY: secret
+    AWS_DEFAULT_REGION: secret
   script:
     - echo "Deploying application..."
     - aws s3 sync . s3://$S3_BUCKET_NAME --delete --exclude ".git/*"  --exclude ".gitlab-ci.yml" --exclude "README.md"
