@@ -49,6 +49,8 @@ deploy-job:      # This job runs in the deploy stage.
   before_script:
     - echo "Installing packages..."
     - pip3 install awscli
+    - pip3 install npm
+    - npm install react react-scripts
   script:
     - echo "Deploying to S3..."
     - npm run build
