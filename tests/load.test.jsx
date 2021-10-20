@@ -1,3 +1,5 @@
+import React from "react";
+
 // required page and functionality
 import render from '@testing-library/react';
 import Header from '../src/components/Header/Header.js';
