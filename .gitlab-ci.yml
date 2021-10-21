@@ -19,15 +19,13 @@
 .pre_build_script: &pre_build
   - npm install react react-scripts
   - npm install:clean
-  
+
 stages:          # List of stages for jobs, and their order of execution
   - build
   - test
   - deploy
 
 build-job:       # This job runs in the build stage, which runs first.
-  rules:
-    if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   stage: build
   <<: *job_configuration
   before_script:
@@ -48,6 +46,8 @@ unit-test-job:   # This job runs in the test stage.
     - npm install:clean
     - npm run test
     - echo "Tests completed"
+  needs:
+    - build
 
 deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
