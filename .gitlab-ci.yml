@@ -46,8 +46,6 @@ unit-test-job:   # This job runs in the test stage.
     - npm install:clean
     - npm run test
     - echo "Tests completed"
-  needs:
-    - build
 
 deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
@@ -68,7 +66,5 @@ deploy-job:      # This job runs in the deploy stage.
       --exclude "*.gitlab-ci.yml"
   after_script:
     - echo "Deployment successful. Please view changes in S3."
-  needs:
-    - test 
   only:
     - main
