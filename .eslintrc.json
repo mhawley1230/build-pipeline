@@ -4,7 +4,7 @@
         "eslint:recommended"
     ],
     "parser": "@babel/eslint-parser",
-    "parserOptions": { "project": ["./tsconfig.json"] },
+    "parserOptions": { "project": ["./jsconfig.json"] },
     "plugins": [
         "@babel"
     ],
