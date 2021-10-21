@@ -68,5 +68,7 @@ deploy-job:      # This job runs in the deploy stage.
       --exclude "*.gitlab-ci.yml"
   after_script:
     - echo "Deployment successful. Please view changes in S3."
+  needs:
+    - test 
   only:
     - main
