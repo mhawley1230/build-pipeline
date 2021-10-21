@@ -13,53 +13,58 @@
 #
 # For more information, see: https://docs.gitlab.com/ee/ci/yaml/index.html#stages
 
+.job_template: &job_configuration  # Hidden yaml configuration that defines an anchor named 'job_configuration'
+  image: nikolaik/python-nodejs
+
+.pre_build_script: &pre_build
+
 stages:          # List of stages for jobs, and their order of execution
   - build
   - test
   - deploy
 
 build-job:       # This job runs in the build stage, which runs first.
+  rules:
+    if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   stage: build
-  image: nikolaik/python-nodejs
+  <<: *job_configuration
   before_script:
-  - echo "Installing packages..."
-  - pip3 install awscli
-  - npm install react react-scripts
+  - *pre_build
   script:
-    - echo "Compiling the code..."
-    - npm run build
-    - echo "Compile complete."
+  - echo "Compiling the code..."
+  - npm run build
+  - echo "Compile complete."
+  - npm run test
 
 unit-test-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
-  image: nikolaik/python-nodejs
+  <<: *job_configuration
   before_script:
-  - echo "Installing packages..."
-  - pip3 install awscli
-  - npm install react react-scripts
+  - *pre_build
   script:
     - echo "Running tests..."
     - npm install:clean
-    - npm test
+    - npm run test
     - echo "Tests completed"
 
 deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
-  image: nikolaik/python-nodejs
+  <<: *job_configuration
   variables:
     S3_BUCKET_NAME: $S3_BUCKET_NAME
     AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
     AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
   before_script:
-    - echo "Installing packages..."
+    - *pre_build
     - pip3 install awscli
-    - npm install react react-scripts
   script:
     - echo "Deploying to S3..."
     - npm install:clean
     - npm run build
-    - aws s3 cp build/ s3://$S3_BUCKET_NAME/ --recursive --exclude "node-modules" --exclude "*.gitignore" --exclude "*.gitlab-ci.yml"
+    - aws s3 cp build/ s3://$S3_BUCKET_NAME/ 
+      --recursive --exclude "node-modules" --exclude "*.gitignore" 
+      --exclude "*.gitlab-ci.yml"
   after_script:
     - echo "Deployment successful. Please view changes in S3."
   only:
