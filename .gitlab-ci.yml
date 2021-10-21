@@ -18,6 +18,7 @@
 
 .pre_build_script: &pre_build
   - npm install react react-scripts
+  - npm install:clean
 
 stages:          # List of stages for jobs, and their order of execution
   - build
