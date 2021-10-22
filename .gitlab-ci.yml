@@ -17,33 +17,35 @@
   image: nikolaik/python-nodejs
 
 .pre_build_script: &pre_build
+  - echo "Installing react and dependencies..."
   - npm install react react-scripts
   - npm run install:clean
+  - echo "Dependencies installed successfully."
 
 stages:          # List of stages for jobs, and their order of execution
   - build
   - test
   - deploy
 
-build-job:       # This job runs in the build stage, which runs first.
+dev-job:       # This job runs in the build stage, which runs first.
   stage: build
   <<: *job_configuration
   before_script:
   - *pre_build
   script:
-  - echo "Compiling the code..."
+  - echo "Compiling code..."
   - npm run build
   - echo "Compile complete."
+  - echo "Running tests."
   - npm run test
 
-unit-test-job:   # This job runs in the test stage.
+test-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
   <<: *job_configuration
   before_script:
   - *pre_build
   script:
     - echo "Running tests..."
-    - npm install:clean
     - npm run test
     - echo "Tests completed"
 
