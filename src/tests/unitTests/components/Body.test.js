@@ -1,7 +1,8 @@
 import React from "react";
 import { Components } from "../../../views/Components/Components.js";
-import { beforeEach, describe, it } from "jest-circus";
+import { beforeEach, it } from "jest-circus";
 import { shallow } from "enzyme";
+import TestRenderer from "react-test-renderer";
 
 jest.mock("../../../views/Components/Components.js", () => ({
     ...jest.requireActual('@material-ui/styles'),
@@ -22,6 +23,9 @@ test("Body component", () => {
     });
 });
 
-describe("Sub components", () => {
-
+test("sub components", () => {
+    it("render", () => {
+        const testRenderer = TestRenderer.create(<Components />);
+        expect(testRenderer).toMatchSnapshot();
+    });
 });
