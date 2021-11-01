@@ -23,9 +23,11 @@ test("Body component", () => {
     });
 });
 
-test("sub components", () => {
-    it("render", () => {
-        const testRenderer = TestRenderer.create(<Components />);
-        expect(testRenderer).toMatchSnapshot();
+describe("sub components", () => {
+    test("snapshot test", () => {
+        it("matches snapshot", () => {
+            const testRenderer = TestRenderer.create(<Components />);
+            expect(testRenderer).toMatchSnapshot();
+        });
     });
 });
