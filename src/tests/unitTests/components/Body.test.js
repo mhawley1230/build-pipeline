@@ -12,6 +12,7 @@ jest.mock("../../../views/Components/Components.js", () => ({
 }))
 
 let wrapper = null;
+let testRenderer;
 
 beforeEach(() => {
     wrapper = shallow(<Components />);
@@ -26,7 +27,7 @@ test("Body component", () => {
 describe("sub components", () => {
     test("snapshot test", () => {
         it("matches snapshot", () => {
-            const testRenderer = TestRenderer.create(<Components />);
+            testRenderer = TestRenderer.create(<Components />);
             expect(testRenderer).toMatchSnapshot();
         });
     });
