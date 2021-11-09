@@ -33,11 +33,9 @@ dev-job:       # This job runs in the build stage, which runs first.
   before_script:
   - *pre_build
   script:
-  - echo "Compiling code..."
-  - npm run build
-  - echo "Compile complete."
   - echo "Running tests."
   - npm run test
+  - echo "Tests completed"
 
 test-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
@@ -45,6 +43,8 @@ test-job:   # This job runs in the test stage.
   before_script:
   - *pre_build
   script:
+    - echo "Compiling code..."
+    - npm run build
     - echo "Running tests..."
     - npm run test
     - echo "Tests completed"
